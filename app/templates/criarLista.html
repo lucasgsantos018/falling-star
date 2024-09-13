@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Lista | Estrela Cadente</title>
+    <!-- Link para a fonte Nunito -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/styles.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="{{url_for('static', filename='images/estrela-cadente-branco.png')}}" alt="Estrela Cadente Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">Seguindo</a></li>
+                <li><a href="#">Pessoal</a></li>
+                <li><a href="{{ url_for('logout') }}">Sair</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="listas-desejos">
+            <div class="listas">
+                <!-- Seção da imagem -->
+                <div class="lista">
+                    <img src="{{ url_for('static', filename='book-icon.png') }}" alt="Ícone da lista" class="logo-login">
+                    <h2>Foto da lista</h2>
+                    <a href="#" class="modificar-dados">Escolher foto</a>
+                </div>
+                
+                <!-- Formulário -->
+                <div class="perfil-info">
+                    <form action="/criar" method="POST">
+                        <div>
+                            <label for="nome">Nome*</label>
+                            <input type="text" id="nome" name="nome" placeholder="Nome" required>
+                        </div>
+                        <div>
+                            <label for="privacidade">Privacidade*</label>
+                            <input type="text" id="privacidade" name="privacidade" placeholder="Privacidade" required>
+                        </div>
+                        <div class="submit-button">
+                            <input type="submit" value="Criar">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Estrela Cadente - Todos os direitos reservados</p>
+    </footer>
+
+</body>
+</html>

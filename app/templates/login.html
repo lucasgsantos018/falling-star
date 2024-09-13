@@ -1,26 +1,57 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Estrela Cadente</title>
+    <!-- Link para a fonte Nunito -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/styles.css')}}">
 
-{% block content %}
-    <h1>Fazer login</h1>
-    <form action="" method="post" novalidate>
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.username.label }}<br>
-            {{ form.username(size=32) }}<br>
-            {% for error in form.username.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.password.label }}<br>
-            {{ form.password(size=32) }}<br>
-            {% for error in form.password.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
-        <p>{{ form.submit() }}</p>
-    </form>
+    <style>
+        .container {
+            display: flex;
+            justify-content: center; /* Centraliza na horizontal */
+            align-items: center; /* Centraliza na vertical */
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
 
-    <p>Não possui conta? <a href="{{ url_for('register') }}">Registre-se</a></p>
-{% endblock %}
+    <main>
+        <div class="container">
+            <img src="{{url_for('static', filename='images/estrela-cadente.png')}}" alt="Estrela Cadente Logo" class="logo-login">
+            <form action="" method="post" novalidate>
+                {{ form.hidden_tag() }}
+                <p>
+                    {{ form.username.label }}<br>
+                    {{ form.username(size=32) }}<br>
+                    {% for error in form.username.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form.password.label }}<br>
+                    {{ form.password(size=32) }}<br>
+                    {% for error in form.password.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+                <p class="submit-button">{{ form.submit() }}</p>
+            </form>
+
+            <div class="signup-container">
+                <p class="signup-link"><a href="../templates/cadastro.html">Não tem cadastro?</a></p>
+            </div>
+            
+            <!-- <p class="signup-link"><a href="../templates/cadastro.html">Não tem cadastro?</a></p> -->
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Estrela Cadente - Todos os direitos reservados</p>
+    </footer>
+</body>
+</html>

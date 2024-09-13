@@ -6,7 +6,7 @@
     <title>Cadastro | Estrela Cadente</title>
     <!-- Link para a fonte Nunito -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/styles.css')}}">
 
     <style>
         .container {
@@ -21,17 +21,38 @@
 
     <main>
         <div class="container">
-            <img src="images/estrela-cadente.png" alt="Estrela Cadente Logo" class="logo-login">
-            <form>
-                <input type="email" placeholder="E-mail">
-                <br><br>
-                <input type="text" placeholder="Username">
-                <br><br>
-                <input type="password" placeholder="Senha">
-                <br><br>
-                <input type="password" placeholder="Confirme sua senha">
-                <br><br>
-                <button type="submit">Cadastrar</button>
+            <img src="{{url_for('static', filename='images/estrela-cadente.png')}}" alt="Estrela Cadente Logo" class="logo-login">
+            <form action="" method="post">
+                {{ form.hidden_tag() }}
+                <p>
+                    {{ form.username.label }}<br>
+                    {{ form.username(size=32) }}<br>
+                    {% for error in form.username.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form.email.label }}<br>
+                    {{ form.email(size=32) }}<br>
+                    {% for error in form.email.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form.password.label }}<br>
+                    {{ form.password(size=32) }}<br>
+                    {% for error in form.password.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form.password2.label }}<br>
+                    {{ form.password2(size=32) }}<br>
+                    {% for error in form.password2.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p class="submit-button">{{ form.submit() }}</p>
             </form>
         </div>
     </main>
