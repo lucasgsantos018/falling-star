@@ -1,15 +1,11 @@
 from datetime import datetime, timezone
 from typing import Optional
-from flask_login import UserMixin
 import sqlalchemy as sa
 import sqlalchemy.orm as so
-from app import db
-from app import login
+from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
-
-@login.user_loader
-def load_user(id):
-    return db.session.get(User, int(id))
+from app import db, login
+from hashlib import md5
 
 #criando a tabela usuário e seus atributos
 class User(UserMixin, db.Model):
@@ -26,14 +22,17 @@ class User(UserMixin, db.Model):
         return '<Usuário {}>'.format(self.username)
     
     #settando o password hashing
+    #Com esses dois métodos implementados, um objeto de usuário agora é capaz de realizar a verificação segura de senhas, sem a necessidade de armazenar as senhas originais.
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
     
-    #Com esses dois métodos implementados, um objeto de usuário agora é capaz de realizar a verificação segura de senhas, sem a necessidade de armazenar as senhas originais.
-
+    def avatar(self, size):
+        digest = md5(self.email.lower().encode('utf-8')).hexdigest()
+        return f'https://www.gravatar.com/avatar/{digest}?d=identicon&s={size}'
+    
 #criando a tabela wishlist    
 class Wishlist(db.Model):
     __tablename__ = 'wishlist'
@@ -51,3 +50,6 @@ class Wishlist(db.Model):
     def __repr__(self):
         return '<Wishlist {}>'.format(self.title)
 
+@login.user_loader
+def load_user(id):
+    return db.session.get(User, int(id))
