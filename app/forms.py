@@ -31,9 +31,3 @@ class RegistrationForm(FlaskForm):
         if user is not None:
             raise ValidationError('Use um email diferente')
         
-# class EditProfileForm(FlaskForm):
-#     #foto
-#     username = StringField('Username', validators=[DataRequired()])
-#     email = StringField('Email', validators=[DataRequired(), Email()])
-#     password = PasswordField('Senha', validators=[DataRequired()])
-#     submit = SubmitField('Submit')

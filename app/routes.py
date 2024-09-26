@@ -5,6 +5,8 @@ import sqlalchemy as sa
 from app import app, db
 from app.forms import LoginForm, RegistrationForm
 from app.models import User
+from werkzeug.utils import secure_filename
+import os
 
 @app.route('/')
 @app.route('/index')
@@ -59,11 +61,12 @@ def register():
     if form.validate_on_submit():
         user = User(username=form.username.data, email=form.email.data)
         user.set_password(form.password.data)
+        user.set_avatar()
         db.session.add(user)
         db.session.commit()
         flash('Usuário cadastrado com sucesso!')
         return redirect(url_for('login'))
-    return render_template('cadastro.html', title='Register', form=form)
+    return render_template('cadastro.html', title='Cadastro', form=form)
 
 #imagem de perfil
 @app.route('/user')
@@ -76,30 +79,67 @@ def user():
     ]
     return render_template('user.html', user=user, posts=posts)
 
-#criar lista
-@app.route('/criarLista')
+
+@app.route('/criarLista', methods=['GET', 'POST'])
 @login_required
 def criarLista():
     user = current_user
+    if request.method == 'POST':
+        nome = request.form.get('nome')
+        privacidade = request.form.get('privacidade')
+        print(f'Nome da Lista: {nome}')
+        print(f'Privacidade: {privacidade}')
+        return redirect(url_for('index'))
+    return render_template('criarLista.html')
     
 
 # #editar perfil
 # from app.forms import EditProfileForm
 
-# @app.route('/edit_profile', methods=['GET', 'POST'])
-# @login_required
-# def edit_profile():
-#     form = EditProfileForm()
-#     if form.validate_on_submit():
-#         current_user.username = form.username.data
-#         current_user.email = form.email.data
-#         current_user.password = form.password.data
-#         db.session.commit()
-#         flash('Alterações Salvas!')
-#         return redirect(url_for('edit_profile'))
-#     elif request.method == 'GET':
-#         form.username.data = current_user.username
-#         form.email.data = current_user.email
-#         form.password.data = current_user.password
-#     return render_template('edit_profile.html', title='Editar Perfil',
-#                            form=form)
+# Defina o caminho absoluto para o diretório de uploads
+UPLOAD_FOLDER = os.path.join(app.root_path, 'static', 'uploads')
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+
+@app.route('/editarPerfil', methods=['GET', 'POST'])
+def editarPerfil():
+    user = current_user  # Pegando o usuário atual logado
+
+    if request.method == 'POST':
+        # Captura os dados do formulário
+        nome_usuario = request.form.get('nome_usuario')
+        email = request.form.get('email')
+        senha = request.form.get('senha')
+        foto_perfil = request.files.get('foto_perfil')
+
+        # Verifica se os dados foram enviados e atualiza o objeto user
+        if nome_usuario:
+            user.nome_usuario = nome_usuario  # Atualiza o nome de usuário
+        if email:
+            user.email = email  # Atualiza o email
+        if senha:
+            user.set_password(senha)  # Certifique-se de que o método para definir a senha existe
+
+        # Lida com o upload da foto de perfil, se enviada
+        if foto_perfil and foto_perfil.filename != '':
+            # Gera um nome seguro para o arquivo
+            filename = secure_filename(foto_perfil.filename)
+            
+            # Define o caminho para salvar o arquivo
+            file_path = os.path.join(UPLOAD_FOLDER, filename)
+            
+            # Salva o arquivo na pasta uploads
+            foto_perfil.save(file_path)
+            
+            # Atualiza o campo de foto do perfil do usuário no banco de dados
+            user.foto_perfil_filename = filename
+        else:
+            # Se o arquivo não for permitido, pode adicionar uma mensagem de erro aqui
+            print("Formato de arquivo não permitido!")
+
+        # Persiste as mudanças no banco de dados
+        db.session.commit()
+
+        # Redireciona o usuário após a atualização
+        return redirect(url_for('index'))
+
+    return render_template('editarPerfil.html', user=user)

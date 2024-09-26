@@ -6,6 +6,7 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import db, login
 from hashlib import md5
+from flask import url_for
 
 #criando a tabela usuário e seus atributos
 class User(UserMixin, db.Model):
@@ -30,8 +31,12 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
     
     def avatar(self, size):
-        digest = md5(self.email.lower().encode('utf-8')).hexdigest()
-        return f'https://www.gravatar.com/avatar/{digest}?d=identicon&s={size}'
+        if self.avatar:
+            # Retorna a URL da imagem de perfil na pasta uploads
+            return url_for('static', filename=f'uploads/{self.avatar}')
+        else:
+            # Se o usuário não tiver uma imagem de perfil, retorna uma imagem padrão
+            return url_for('static', filename=f'uploads/default-profile.png')
     
 #criando a tabela wishlist    
 class Wishlist(db.Model):
