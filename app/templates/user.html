@@ -24,12 +24,11 @@
 
     <main>
         <section class="perfil"></section>
-            <img class="avatar" src="{{ user.avatar(150) }}" alt="Avatar" style="border-radius: 50%; object-fit: cover; float: left; margin-right: 25px;">
-            <div class="perfil-info" style="font-size: large; margin-top: 20px;">
-                <h2>{{ user.username }}</h2>
+        <img class="avatar" src="{{ url_for('static', filename='uploads/default-profile.png') }}" alt="Avatar" style="border-radius: 50%; object-fit: cover; float: left; margin-right: 25px; height: 200px; width: 200px;">
+        <h2>{{ user.username }}</h2>
                 <p>2 listas de desejos</p>
                 <p>Seguindo: <b>2</b> &nbsp; &nbsp; Seguidores: <b>3</b></p>
-                <a href="#" class="modificar-dados">Modificar dados pessoais</a>
+                <a href="{{ url_for('editarPerfil') }}" class="modificar-dados">Modificar dados pessoais</a>
             </div>
         </section>
 
@@ -46,9 +45,9 @@
                     <p>Livros</p>
                     <p>2 itens</p>
                 </div>
-                <div class="lista">
+                <div class="lista" >
                     <div class="add-list">
-                        <p>+</p>
+                        <a href="{{ url_for('criarLista') }}"><p>+</p></a>
                     </div>
                     <p>Criar lista</p>
                 </div>

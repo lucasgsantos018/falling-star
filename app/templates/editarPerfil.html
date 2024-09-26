@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Perfil | Estrela Cadente</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/estrela-cadente-branco.png') }}" alt="Estrela Cadente Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">Seguindo</a></li>
+                <li><a href="#">Pessoal</a></li>
+                <li><a href="{{ url_for('logout') }}">Sair</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="perfil-editar">
+            <div class="perfil">
+                <!-- Seção da foto de perfil -->
+                <div class="foto-perfil">
+                    <h2>Foto de Perfil</h2>
+                    <img class="avatar" 
+                    src="{{ url_for('static', filename='uploads/' + user.foto_perfil_filename if user.foto_perfil_filename else 'uploads/default-profile.png') }}" 
+                    alt="Avatar" style="border-radius: 50%; object-fit: cover; float: left; margin-right: 25px;  height: 200px; width: 200px;">                    <form action="{{ url_for('editarPerfil') }}" method="POST" enctype="multipart/form-data">
+                        <label for="foto_perfil">Escolher nova foto:</label>
+                        <input type="file" id="foto_perfil" name="foto_perfil" accept="image/*">
+                </div>
+
+                <!-- Formulário de edição de dados -->
+                <div class="perfil-info">
+                        <div>
+                            <label for="nome_usuario">Nome de Usuário</label>
+                            <input type="text" name="nome_usuario" value="{{ user.nome_usuario }}" placeholder="Nome de usuário">
+                        </div>
+                        <div>
+                            <label for="email">Email</label>
+                            <input type="email" name="email" value="{{ user.email }}" placeholder="Email">
+                        </div>
+                        <div>
+                            <label for="senha">Senha</label>
+                            <input type="password" name="senha" placeholder="Senha" required>
+                        </div>
+                        
+                        <div class="submit-button">
+                            <input type="submit" value="Salvar">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Estrela Cadente - Todos os direitos reservados</p>
+    </footer>
+
+</body>
+</html>
